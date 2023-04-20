@@ -1,0 +1,19 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(9, 50px);
+  grid-template-rows: repeat(9, 50px);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fdfdfd;
+  text-align: center;
+  border: 1px inset #333;
+  color: #333;
+}
+
+/* .cell:nth-child(3n) {
+  border: 2px inset #333;
+} */
