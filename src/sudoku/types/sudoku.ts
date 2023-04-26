@@ -1,9 +1,6 @@
-export type Cell = "." | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type CellState = Record<string, Cell>;
+export type Cell = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type Coord = [number, number];
 
-export const initialState: CellState = {
-  fill: 9,
-  empty: ".",
-};
+export const cellEmptyState: Cell = 0;
 
 export type Board = Cell[][];

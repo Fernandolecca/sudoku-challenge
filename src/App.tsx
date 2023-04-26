@@ -1,33 +1,55 @@
-import { Board, Cell } from "@/sudoku/types/";
-import { useState } from "react";
-import module from "./sudoku/styles/board.module.css";
+import { ChangeEvent } from "react";
+import { Grid, EditCellInput, Button } from "./sudoku/components/";
+import { useSudoku } from "./sudoku/hooks/useSudoku";
+import { getPuzzleSolution } from "./sudoku/services/sudoku";
+import { Coord } from "./sudoku/types";
+import {
+  mapBoardToString,
+  mapStringToBoard,
+  setValueInCell,
+} from "./helpers/sudoku";
 
-const getLenghtArray = (size: number) => {
-  return new Array(size);
-};
-
-const generateEmptyBoard = (size: number, cellValue: Cell = "."): Board => {
-  return getLenghtArray(size).fill(getLenghtArray(size).fill(cellValue));
-};
-
-const getRandomDigit = () => {};
+import module from "./app.module.css";
 
 function App() {
-  const [board, setBoard] = useState<Board>(generateEmptyBoard(9));
+  const { board, activeCellCoords, setBoard, setActiveCellCoords } =
+    useSudoku();
+
+  const changeActiveCellCoords = (coords: Coord) => {
+    setActiveCellCoords(coords);
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.valueAsNumber;
+
+    if (inputValue < 10) {
+      const newBoard = setValueInCell(board, activeCellCoords!, inputValue);
+      setBoard(newBoard);
+    }
+  };
+
+  const solvePuzzle = async () => {
+    const puzzle = mapBoardToString(board);
+    const solution = await getPuzzleSolution(puzzle);
+    const newBoard = mapStringToBoard(solution);
+    setActiveCellCoords(null);
+    setBoard(newBoard);
+  };
 
   return (
-    <div>
-      <div className={module.grid}>
-        {board.map((row) =>
-          row.map((cell, i) => (
-            <div className={module.cell} key={i}>
-              {cell}
-            </div>
-          ))
-        )}
-      </div>
-      <p>App works!!</p>
-    </div>
+    <main className={module.app}>
+      <h1>Sudoku solver</h1>
+      <Grid
+        board={board}
+        activeCellCoords={activeCellCoords}
+        onActiveCellCoords={changeActiveCellCoords}
+      />
+      <Button onClick={solvePuzzle} />
+      <EditCellInput
+        activeCellCoords={activeCellCoords}
+        onChange={handleChange}
+      />
+    </main>
   );
 }
 

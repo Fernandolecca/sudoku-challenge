@@ -1,0 +1,8 @@
+.cellInput,
+.cellInput:focus {
+  position: fixed;
+  left: -100%;
+  appearance: none;
+  outline: none;
+  border: none;
+}
